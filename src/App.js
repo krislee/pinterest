@@ -1,23 +1,30 @@
 import logo from './logo.svg';
 import './App.css';
+// import PinterestPins from './data'
+import React, { useState } from 'react'
+import useIntersect from './useIntersect'
 
 function App() {
+  const [query, setQuery] = useState('')
+  const [startSliceNumber, setStartSliceNumber] = useState(0)
+  const [endSliceNumber, setEndSliceNumber] = useState(100)
+
+  useIntersect(query, startSliceNumber, endSliceNumber)
+
+  const handleQuery = (event) => {
+    setQuery(event.target.value)
+
+    // Reset the page back to the beginning
+    setStartSliceNumber(0) 
+    setEndSliceNumber(100)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+    <h1>Pinterest</h1>
+    <input type="text" onChange={handleQuery}></input>
+    {/* <PinterestPins/> */}
+
     </div>
   );
 }
