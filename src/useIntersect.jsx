@@ -127,8 +127,11 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
                     if(pins.length === index + 1) {
                         return (
                             <>
-                            <div ref={lastPinElementRef} style={{width: '200px', height: '100px', backgroundColor:'yellow'}} key={pin.id}>{pin.title}</div>
-                            <p>***************************</p>
+                            <div ref={lastPinElementRef} style={{width: '200px', height: '100px', backgroundColor:'yellow'}} key={pin.id}>
+                                {pin.title}
+                                {/* {hasMore && <h3>Loading...</h3>} */}
+                            </div>
+                            {/* {hasMore && <h3>Loading...</h3>} */}
                             </>
                         )
                     } else {
@@ -152,4 +155,3 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
 
   
 }
-
