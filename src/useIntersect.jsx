@@ -2,12 +2,11 @@ import { useEffect, useState, useRef } from 'react'
 
 export default function UseIntersect() { // When your scrolling hits the bottom, fetch the next page of results
     const [startSliceNumber, setStartSliceNumber] = useState(0)
-    const [endSliceNumber, setEndSliceNumber] = useState(10)
 
     const [error, setError] = useState(false)
     const [pins, setPins] = useState([])
     const [allPins, setAllPins] = useState([])
-    const [hasMore, setHasMore] = useState(false)
+    const [hasMore, setHasMore] = useState(true)
 
 
     useEffect(() => {
@@ -32,15 +31,15 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
 
                 const pinsJSON = await pinsResponse.json()
                 console.log(pinsJSON)
-
                 
                 setAllPins(pinsJSON)
-                // Get only 100 or less results every time we scroll to the bottom
-                setPins(pinsJSON.slice(startSliceNumber, endSliceNumber))
-                // console.log(40, !(startSliceNumber >= pinsResponse.length))
-                // setHasMore(!(startSliceNumber >= pinsResponse.length))
 
-             
+                // Get only 10 or less results every time we scroll to the bottom
+                setPins(pinsJSON.slice(startSliceNumber, startSliceNumber+10))
+
+                // console.log(40, !(startSliceNumber >= pinsResponse.length))
+                setHasMore(!(startSliceNumber >= pinsResponse.length))
+
             } catch (error) {
                 if (error.name === 'AbortError') {
                     console.log('Request was cancelled')
@@ -60,19 +59,20 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
     useEffect(() => {
 
         const getNextPins =  () => {
+            // if(hasMore) {
+                console.log(63, startSliceNumber)
+                // Get only 10 or less results every time we scroll to the bottom
+                const nextPins = allPins.slice(startSliceNumber, startSliceNumber+10)
 
-            console.log(64, startSliceNumber)
-            // Get only 10 or less results every time we scroll to the bottom
-            const nextPins = allPins.slice(startSliceNumber, startSliceNumber+10)
+                setPins(prevPins => {
+                    return [...new Set([...prevPins, ...nextPins.map(pin => pin)])]
+                })
 
-            setPins(prevPins => {
-                return [...new Set([...prevPins, ...nextPins.map(pin => pin)])]
-            })
-
-            // console.log(72, !(startSliceNumber >= allPins.length))
-            
-            setHasMore(!(startSliceNumber >= allPins.length))
-            
+                // console.log(72, !(startSliceNumber >= allPins.length))
+                
+                // setHasMore(!(startSliceNumber >= allPins.length))
+            // }
+            // console.log(75, hasMore)
         }
         
         getNextPins()
@@ -92,14 +92,16 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
         // if (loader.current) loader.current.disconnect()
 
         const observer = new IntersectionObserver(entries => {
-        // console.log(33, hasMore)
-        // console.log(34, entries[0].isIntersecting)
         
             // Only observing one target element 
             if (entries[0].isIntersecting) {
                 console.log('Visible')
+                // console.log(99, hasMore)
+
+ 
                 setStartSliceNumber(prevStartSliceNumber => prevStartSliceNumber + 10)
-                // setEndSliceNumber(prevEndSliceNumber => prevEndSliceNumber + 10)
+                console.log(102, startSliceNumber)
+            
 
             }
         }, options)
@@ -107,6 +109,8 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
         if(loader.current) {
             observer.observe(loader.current)
         }
+
+        
 
     }, [])
 
@@ -129,7 +133,7 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
                     
                 })
             }
-            <div ref={loader} >Loading...</div>
+            <div ref={loader}> Loading...</div>
             </div>
         
             
