@@ -1,7 +1,9 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback} from 'react'
 
 export default function UseIntersect() { // When your scrolling hits the bottom, fetch the next page of results
+
     const [startSliceNumber, setStartSliceNumber] = useState(0)
+    const [prevY, setPrevY] = useState(0)
 
     const [error, setError] = useState(false)
     const [pins, setPins] = useState([])
@@ -40,6 +42,7 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
                 // console.log(40, !(startSliceNumber >= pinsResponse.length))
                 setHasMore(!(startSliceNumber >= pinsResponse.length))
 
+
             } catch (error) {
                 if (error.name === 'AbortError') {
                     console.log('Request was cancelled')
@@ -70,28 +73,29 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
 
                 // console.log(72, !(startSliceNumber >= allPins.length))
                 
-                // setHasMore(!(startSliceNumber >= allPins.length))
+                setHasMore(!(startSliceNumber >= allPins.length))
             // }
             // console.log(75, hasMore)
         }
         
         getNextPins()
 
+
     }, [startSliceNumber]) // Want to fetch results everytime we do a search or scrolling
 
 
-    const loader = useRef(null) // null initially - then set a reference to the last book element
+    const observer = useRef(null) // null initially - then set a reference to the last book element
 
-    useEffect(() => {
+    const lastPinElementRef = useCallback(element => {
         const options = {
             root: null,
             // rootMargin: "20px",
-            threshold: 0
+            threshold: 1.0
         }
 
-        // if (loader.current) loader.current.disconnect()
+        if (observer.current) observer.current.disconnect()
 
-        const observer = new IntersectionObserver(entries => {
+        observer.current = new IntersectionObserver(entries => {
         
             // Only observing one target element 
             if (entries[0].isIntersecting) {
@@ -101,18 +105,15 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
  
                 setStartSliceNumber(prevStartSliceNumber => prevStartSliceNumber + 10)
                 console.log(102, startSliceNumber)
-            
+                setPrevY(entries[0].boundingClientRect.y)
 
             }
         }, options)
 
-        if(loader.current) {
-            observer.observe(loader.current)
+        if(element) {
+            observer.current.observe(element)
         }
-
-        
-
-    }, [])
+    }, [hasMore])
 
     // return { error, pins, hasMore }
 
@@ -123,22 +124,32 @@ export default function UseIntersect() { // When your scrolling hits the bottom,
             <div>
             {
                 pins.map((pin, index) => {
-                    
-                    return (
-                        <>
-                        <div style={{width: '200px', height: '100px', backgroundColor:'yellow'}} key={pin.id}>{pin.title}</div>
-                        <p>--------------------------</p>
-                        </>
-                    )
-                    
+                    if(pins.length === index + 1) {
+                        return (
+                            <>
+                            <div ref={lastPinElementRef} style={{width: '200px', height: '100px', backgroundColor:'yellow'}} key={pin.id}>{pin.title}</div>
+                            <p>***************************</p>
+                            </>
+                        )
+                    } else {
+                        return (
+                            <>
+                            <div style={{width: '200px', height: '100px', backgroundColor:'yellow'}} key={pin.id}>{pin.title}</div>
+                            <p>--------------------------</p>
+                            </>
+                        )
+                    }
+                        
                 })
             }
-            <div ref={loader}> Loading...</div>
+            <div> {hasMore && 'Loading...'}</div>
             </div>
         
             
         
         </div>
     );
+
+  
 }
 
