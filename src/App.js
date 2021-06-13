@@ -4,7 +4,7 @@ import './App.css';
 // We need an element reference to the last pin element in order to know which element is the last one
 // When reference changes to the last pin when we reach to the bottom scroll, component is not rerendered
 import React, { useState, useRef, useEffect, useCallback } from 'react' // useRef is to store a value that persists after each render
-import UseIntersect from './useIntersect'
+import UseIntersect from './useIntersect2'
 
 function App() {
   // const [query, setQuery] = useState('')
