@@ -10,18 +10,18 @@ function App() {
 
     const {pins, hasMore, error} = UsePinsInfiniteScroll(apiURL, resultsPerPage, loader)
     
+    // style={{width: '200px', height: '100px', backgroundColor:'yellow'}}
     return (
         <div>
             <h1>Pinterest</h1>
             
-            <div>
+            <div className="pin_container">
                 {
                     pins.map((pin, index) => {
                         
                         return (
                             <>
-                            <div style={{width: '200px', height: '100px', backgroundColor:'yellow'}} key={pin.id}>{pin.title}</div>
-                            <p>--------------------------</p>
+                            <div key={pin.id} className="card">{pin.title}</div>
                             </>
                         )
                         
@@ -29,9 +29,9 @@ function App() {
                 }
 
                 <div ref={loader} style={{display: hasMore? 'block': 'none'}}>Loading...</div>
-                {error && <div>{error}</div>}
             </div>
-        
+            
+            {error && <div>{error}</div>}
             
         
         </div>

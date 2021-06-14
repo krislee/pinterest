@@ -1,38 +1,43 @@
-.App {
-  text-align: center;
+:root {
+  --card_width: 250px;
+  --row_increment: 10px;
+  --card_border_radius: 16px;
+  --card_small: 26;
+  --card_med: 33;
+  --card_large: 45;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+.pin_container {
+  margin: 0;
+  padding: 0;
+  width: 80vw;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--card_width));
+  grid-auto-rows: var(--row_increment);
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+
+  background-color: black;
 }
 
-.App-link {
-  color: #61dafb;
+.card {
+  padding: 0;
+  margin: 15px 10px;
+  border-radius: var(--card_border_radius);
+  background-color: red;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* .pin_container > div:nth-child(1) {
+  grid-row-end: span var(--card_small)
+} */
+
+.pin_container > div:nth-child(even) {
+  grid-row-end: span var(--card_med)
+}
+
+.pin_container > div:nth-child(odd) {
+  grid-row-end: span var(--card_large)
 }
