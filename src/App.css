@@ -53,4 +53,11 @@ p {
   margin: 0;
 }
 
+.searchBar {
+  width: 100%;
+  padding: 1.5vh;
+  margin: 2vh 0 2vh 0;
+  border-radius: 20px;
+}
+
 /* Pinterest Layout Credit: https://dev.to/anobjectisa/build-a-pinterest-layout-using-html-css-2m2d */

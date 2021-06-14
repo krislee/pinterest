@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useRef } from 'react' 
+import React, { useRef, useState } from 'react' 
 import UsePinsInfiniteScroll from './UsePinsInfiniteScroll'
 
 const apiURL = 'nyc_ttp_pins.json'
@@ -14,14 +14,26 @@ const options = {
 
 function App() {
     const loader = useRef(null) // null initially - then a reference to loading element
+    const [query, setQuery] = useState('')
+    const [startSliceNumber, setStartSliceNumber] = useState(0)
 
-    const {pins, error, loading} = UsePinsInfiniteScroll(apiURL,resultsPerPage, loader, options)
+    const grabStartSliceNumber = (startSliceNumber) => setStartSliceNumber(startSliceNumber)
+
+    const {pins, error, loading} = UsePinsInfiniteScroll(apiURL,resultsPerPage, loader, options, query, startSliceNumber, grabStartSliceNumber)
+
+    const handleQuery = (event) => {
+        setQuery(event.target.value)
     
-    // style={{width: '200px', height: '100px', backgroundColor:'yellow'}}
+        // Reset the page back to the beginning
+        setStartSliceNumber(0) 
+    }
+    
+ 
     return (
         <div>
             <h1>Pinterest</h1>
-            
+            <input type="text" value={query} onChange={handleQuery} className="searchBar"></input>
+
             <div className="pin_container">
                 {
                     pins.map((pin, index) => {
