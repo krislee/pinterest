@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react'
 import getPins from './getPins'
 
-// Intersection Observer Options
-const options = {
-    root: null,
-    rootMargin: "0px",
-    threshold: 0
-}
-
-export default function UsePinsInfiniteScroll(url, resultsPerPage, loader) { // When your scrolling hits the bottom, fetch the next page of results
+export default function UsePinsInfiniteScroll(url, resultsPerPage, loader, options) { // When your scrolling hits the bottom, fetch the next page of results
     // States
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -47,8 +40,8 @@ export default function UsePinsInfiniteScroll(url, resultsPerPage, loader) { // 
     }, [startSliceNumber])
 
 
-    useEffect(() => {
-        if (!hasMore) return // If we have no more pins, we do not want to keep calling the Intersection Observer API
+    useEffect((options) => {
+        if (loading || !hasMore) return // If we have no more pins (hasMore is false), we do not want to keep calling the Intersection Observer API. 
 
         const observer = new IntersectionObserver(handleObserver, options)
 
@@ -71,5 +64,5 @@ export default function UsePinsInfiniteScroll(url, resultsPerPage, loader) { // 
         }
     }
 
-    return {pins, hasMore, error}
+    return {pins, hasMore, error, loading}
 }
