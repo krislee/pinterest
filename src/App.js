@@ -32,7 +32,7 @@ function App() {
     return (
         <div>
             <h1>Pinterest</h1>
-            <input type="text" value={query} onChange={handleQuery} className="searchBar"></input>
+            <input type="text" value={query} onChange={handleQuery} placeholder="Search Pins" className="searchBar"></input>
 
             <div className="pin_container">
                 {
@@ -40,12 +40,14 @@ function App() {
                         
                         return (
                             <>
-                            <div key={index} className="card">
+                            <div key={pin.id} className="card">
                                 {/* <div className="image" style={{backgroundImage: `url(${pin.images["474x"].url})`}}></div> */}
-                            
+                                
                                 {pin.title.length > 30 ? <p><b>{pin.title.slice(0, 30)}...</b></p> : <p><b>{pin.title}</b></p>}
                                 <p>{pin.pinner.username}</p>
+                                {/* <p>---------------</p> */}
                             </div>
+                         
                             </>
                         )
                         
@@ -55,14 +57,16 @@ function App() {
                 {/* <h1 ref={loader} style={{display: hasMore? 'block': 'none'}}>Loading...</h1> */}
             </div>
             <div ref={loader}>
-                <h1 style={{
-                    display: loading ? 'block': 'none', 
+                <h1 
+                style={{
+                    display: loading ? 'block': 'none',
                     backgroundColor: 'blue', 
                     margin: 'auto', 
                     width: '75%', 
                     height: '100px',
                     textAlign: 'center'
-                }}>
+                }}
+                >
                 Loading...
                 </h1>
             </div>
