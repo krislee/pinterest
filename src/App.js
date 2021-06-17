@@ -38,19 +38,18 @@ function App() {
     
         // Reset the page back to the beginning
         setStartSliceNumber(0) 
+        // Reset noMore state so infinity scroll can be triggered
         setNoMore(false)
     }
     
  
     return (
         <div>
-            <h1>Pinterest</h1>
+            <h1 className="pinterest-heading">Pinterest</h1>
             <input type="text" value={query} onChange={handleQuery} placeholder="Search Pins" className="searchBar"></input>
-
             <div className="pin_container">
                 {
                     pins.map((pin, index) => {
-                        
                         return (
                             <>
                             <div key={pin.id} className="card">
@@ -58,7 +57,6 @@ function App() {
                                 
                                 {pin.title.length > 30 ? <p><b>{pin.title.slice(0, 30)}...</b></p> : <p><b>{pin.title}</b></p>}
                                 <p>{pin.pinner.username}</p>
-                                {/* <p>---------------</p> */}
                             </div>
                          
                             </>
@@ -66,8 +64,6 @@ function App() {
                         
                     })
                 }
-
-                {/* <h1 ref={loader} style={{display: hasMore? 'block': 'none'}}>Loading...</h1> */}
             </div>
             <div ref={loader}>
                 <h1 
@@ -76,7 +72,7 @@ function App() {
                     backgroundColor: 'blue', 
                     margin: 'auto', 
                     width: '75%', 
-                    height: '100px',
+                    height: '75px',
                     textAlign: 'center'
                 }}
                 >
@@ -84,8 +80,6 @@ function App() {
                 </h1>
             </div>
             {error && <div>{error}</div>}
-            
-        
         </div>
 
     )
