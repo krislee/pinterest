@@ -12,7 +12,6 @@ Install the dependencies for this project (be sure you are inside the `Pinterest
 ```
 npm i
 ```
-<br>
 
 ### Executing program
 After installing dependencies, run the program locally (still be inside of the `Pinterest` folder).
