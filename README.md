@@ -19,3 +19,6 @@ After installing dependencies, run the program locally (still be inside of the `
 ```
 npm start
 ```
+
+## Acknowledgments
+- [Masonary CSS Layout](https://dev.to/anobjectisa/build-a-pinterest-layout-using-html-css-2m2d)
