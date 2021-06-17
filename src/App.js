@@ -16,16 +16,29 @@ function App() {
     const loader = useRef(null) // null initially - then a reference to loading element
     const [query, setQuery] = useState('')
     const [startSliceNumber, setStartSliceNumber] = useState(0)
+    const [noMore, setNoMore] = useState(false)
 
     const grabStartSliceNumber = (startSliceNumber) => setStartSliceNumber(startSliceNumber)
+    const grabNoMore = (noMore) => setNoMore(noMore)
 
-    const {pins, error, loading} = UsePinsInfiniteScroll(apiURL,resultsPerPage, loader, options, query, startSliceNumber, grabStartSliceNumber)
+    const {pins, error, loading} = UsePinsInfiniteScroll(
+        apiURL, 
+        resultsPerPage, 
+        loader, 
+        options, 
+        startSliceNumber, 
+        grabStartSliceNumber, 
+        noMore, 
+        grabNoMore,
+        query
+    )
 
     const handleQuery = (event) => {
         setQuery(event.target.value)
     
         // Reset the page back to the beginning
         setStartSliceNumber(0) 
+        setNoMore(false)
     }
     
  

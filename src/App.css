@@ -64,3 +64,27 @@ p {
 }
 
 /* Pinterest Layout Credit: https://dev.to/anobjectisa/build-a-pinterest-layout-using-html-css-2m2d */
+
+
+@media only screen and (max-width: 600px) {
+  .pin_container {
+    grid-template-columns: auto auto;
+  }
+  .card:nth-child(odd) {
+    grid-column: 1;
+  }
+  .card:nth-child(even) {
+    grid-column: 2;
+  }
+}
+
+
+@media only screen and (max-width: 400px) {
+  .pin_container {
+    grid-template-columns: auto auto;
+  }
+  .card {
+    grid-column: 1;
+  }
+}
+
