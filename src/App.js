@@ -1,7 +1,10 @@
 import './App.css';
-import React, { useRef, useState } from 'react' 
-import UsePinsInfiniteScroll from './UsePinsInfiniteScroll'
+import React, { useRef } from 'react' 
+import UseGetPins from './useGetPins'
+import UseIntersect from './useIntersect'
+import Pins from './pins'
 
+// CONSTANTS
 const apiURL = 'nyc_ttp_pins.json'
 const resultsPerPage = 10
 const options = {
@@ -11,78 +14,16 @@ const options = {
 }
 
 
+export default function App() {
+    const loader = useRef(null) 
 
-function App() {
-    const loader = useRef(null) // null initially - then a reference to loading element
-    const [query, setQuery] = useState('')
-    const [startSliceNumber, setStartSliceNumber] = useState(0)
-    const [noMore, setNoMore] = useState(false)
+    // Get all or query pins from UseGetPins hook
+    const { loading, noMorePins, grabStartSliceNumber, query, handleQuery, pins, error } = UseGetPins(apiURL, resultsPerPage, loader, options)
+    // UseIntersect hook for infinity scroll 
+    UseIntersect(loading, noMorePins, resultsPerPage, loader, options, grabStartSliceNumber)
 
-    const grabStartSliceNumber = (startSliceNumber) => setStartSliceNumber(startSliceNumber)
-    const grabNoMore = (noMore) => setNoMore(noMore)
 
-    const {pins, error, loading} = UsePinsInfiniteScroll(
-        apiURL, 
-        resultsPerPage, 
-        loader, 
-        options, 
-        startSliceNumber, 
-        grabStartSliceNumber, 
-        noMore, 
-        grabNoMore,
-        query
-    )
-
-    const handleQuery = (event) => {
-        setQuery(event.target.value)
-    
-        // Reset the page back to the beginning
-        setStartSliceNumber(0) 
-        // Reset noMore state so infinity scroll can be triggered
-        setNoMore(false)
-    }
-    
- 
     return (
-        <div>
-            <h1 className="pinterest-heading">Pinterest</h1>
-            <input type="text" value={query} onChange={handleQuery} placeholder="Search Pins" className="searchBar"></input>
-            <div className="pin_container">
-                {
-                    pins.map((pin, index) => {
-                        return (
-                            <>
-                            <div key={pin.id} className="card">
-                                {/* <div className="image" style={{backgroundImage: `url(${pin.images["474x"].url})`}}></div> */}
-                                
-                                {pin.title.length > 30 ? <p><b>{pin.title.slice(0, 30)}...</b></p> : <p><b>{pin.title}</b></p>}
-                                <p>{pin.pinner.username}</p>
-                            </div>
-                         
-                            </>
-                        )
-                        
-                    })
-                }
-            </div>
-            <div ref={loader}>
-                <h1 
-                style={{
-                    display: loading ? 'block': 'none',
-                    backgroundColor: 'blue', 
-                    margin: 'auto', 
-                    width: '75%', 
-                    height: '75px',
-                    textAlign: 'center'
-                }}
-                >
-                Loading...
-                </h1>
-            </div>
-            {error && <div>{error}</div>}
-        </div>
-
+        <Pins query={query} handleQuery={handleQuery} pins={pins} loader={loader} loading={loading} error={error}/>
     )
 }
-
-export default App;

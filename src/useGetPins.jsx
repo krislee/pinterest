@@ -1,13 +1,28 @@
 import { useEffect, useState } from 'react'
 
 /*
- * When your scrolling hits the bottom, fetch the next "page" of results
+ * When your scrolling hits the bottom, fetch the next "page" of pins
  */
-export default function UsePinsInfiniteScroll(url, resultsPerPage, loader, options, startSliceNumber, grabStartSliceNumber, noMore, grabNoMore, query) { 
+export default function UseGetPins(apiURL, resultsPerPage) { 
     // States
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
+
+    const [query, setQuery] = useState('')
     const [pins, setPins] = useState([])
+    const [startSliceNumber, setStartSliceNumber] = useState(0)
+    const [noMorePins, setNoMorePins] = useState(false)
+
+    const grabStartSliceNumber = (startSliceNumber) => setStartSliceNumber(startSliceNumber)
+
+    const handleQuery = (event) => {
+        setQuery(event.target.value)
+    
+        // Reset the page back to the beginning
+        setStartSliceNumber(0) 
+        // Reset noMore state so infinity scroll can be triggered
+        setNoMorePins(false)
+    }
 
     useEffect(() => {
         setPins([])
@@ -26,8 +41,8 @@ export default function UsePinsInfiniteScroll(url, resultsPerPage, loader, optio
 
         const getPins = async () => {
             try {
-                const pinsResponse = await fetch(`${url}`, {signal: signal})
-        
+                const pinsResponse = await fetch(`${apiURL}`, {signal: signal})
+
                 const pinsJSON = await pinsResponse.json()
         
                 if (query) {
@@ -44,7 +59,7 @@ export default function UsePinsInfiniteScroll(url, resultsPerPage, loader, optio
                     })
 
                     setLoading(false)
-                    if(startSliceNumber >= getQueryResults.length) grabNoMore(true)
+                    if(startSliceNumber >= getQueryResults.length) setNoMorePins(true)
         
                 } else {
                     const nextPins = pinsJSON.slice(startSliceNumber, startSliceNumber+resultsPerPage)
@@ -54,19 +69,16 @@ export default function UsePinsInfiniteScroll(url, resultsPerPage, loader, optio
                     })
 
                     setLoading(false)
-                    if(startSliceNumber >= pinsJSON.length) grabNoMore(true)
+                    if(startSliceNumber >= pinsJSON.length) setNoMorePins(true)
                     
                 }
         
             } catch (error) {
-                if (error.name === 'AbortError') {
-                    console.log('Request was cancelled')
-                    return
-                }
+                if (error.name === 'AbortError') return
                 setError(true)
             }
-
         }
+        
         getPins()
 
         return () => {
@@ -76,29 +88,6 @@ export default function UsePinsInfiniteScroll(url, resultsPerPage, loader, optio
 
     }, [startSliceNumber, query])
 
-    /*
-     * Change the "page" number when we scroll to the bottom
-     */
-    useEffect(() => {
-        console.log(89, loading, noMore)
-        // If we have no more pins (noMore is true) and loading, we do not want to keep calling the Intersection Observer API. 
-        if (loading || noMore) return 
+    return { loading, noMorePins, grabStartSliceNumber, query, handleQuery, pins, error }
 
-        const observer = new IntersectionObserver(entries => {
-            // Only observing one target element, the loading element
-            if (entries[0].isIntersecting) {
-                grabStartSliceNumber(prevStartSliceNumber => prevStartSliceNumber + resultsPerPage)
-            }
-        }, options)
-
-        if(loader.current) {
-            observer.observe(loader.current)
-        }
-
-        return () => observer.unobserve(loader.current)
-    }, [loading, noMore]) // We want loading and noMore in the dependency array because we want to know 
-    // if we should still be observing or not if we are loading pins or there is no more pins
-
-
-    return {pins, error, loading}
 }
