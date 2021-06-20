@@ -54,7 +54,6 @@ img {
 
     img {
         margin: 0 auto;
-        width: 100%;
     }
 
     .onePinDetails{
@@ -74,10 +73,18 @@ img {
     }
 }
 
+@media screen and (max-width: 800px){
+    img {
+        width: 100%;
+    }
+}
+
 @media screen and (max-width: 500px){
+
     .onePinTitle {
         font-size: 1em;
     }
+
     .followButton, .saveButton {
         font-size: 1rem;
     }

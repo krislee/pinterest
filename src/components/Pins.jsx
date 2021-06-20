@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import '../styles/Pins.css'
 
-import UseGetPins from './useGetPins'
-import UseIntersect from './useIntersect'
+import UseGetPins from '../hooks/useGetPins'
+import UseIntersect from '../hooks/useIntersect'
 
 export default function Pins ({ apiURL, resultsPerPage, options, startSliceNumber, grabStartSliceNumber, noMorePins, grabNoMorePins }) {
     const loader = useRef(null) 

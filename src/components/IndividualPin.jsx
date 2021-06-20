@@ -1,6 +1,6 @@
 import React, { useEffect, useState, } from 'react';
 import { useParams } from 'react-router-dom';
-import './IndividualPin.css'
+import '../styles/IndividualPin.css'
 
 export default function IndividualPin ({ apiURL, grabStartSliceNumber, grabNoMorePins }) {
     const [loadingPin, setLoadingPin] = useState(true)

@@ -1,9 +1,8 @@
-import './App.css';
 import React, { useState } from 'react' 
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import Pins from './Pins'
-import IndividualPin from './IndividualPin';
+import Pins from './components/Pins'
+import IndividualPin from './components/IndividualPin';
 
 // CONSTANTS
 const apiURL = 'nyc_ttp_pins.json'
