@@ -3,23 +3,23 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 2rem;
     padding: 1.5rem;
+    width: 75%;
+    margin: 0 auto;
 }
 
 img {
     border-radius: 16px;
-    min-width: 400px;
-    max-width: 500px;
-    max-height: 600px;
+    width: 50%;
 }
+
 .onePinDetails {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    padding: 1rem;
-    margin-left: 1.5rem;
+    margin-left: 3rem;
 }
 
-.onePinDetails p {
+.onePinDescription > p {
     word-wrap: break-word;
 }
 
@@ -28,15 +28,57 @@ img {
     align-items: center;
 }
 
-.followButton {
+.followButton, .saveButton {
     padding: 0.5rem;
     margin-left: 2rem;
     border-radius: 10px;
     font-size: 1.5rem;
+    border: none;
+    background-color: rgb(196, 203, 203);
 }
 
-@media screen and (max-width: 800px){
+.saveButton {
+    margin: 0;
+    background-color: #c71028;
+    color: white;
+}
+.saveButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media screen and (max-width: 1000px){
     .onePin {
         flex-direction: column;
+    }
+
+    img {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .onePinDetails{
+        margin:0;
+    }
+
+    .onePinTitle {
+        font-size: 1.25em;
+    }
+
+    .followButton, .saveButton {
+        font-size: 1.25rem;
+    }
+
+    .saveButtonContainer {
+        margin-top: 1rem;
+    }
+}
+
+@media screen and (max-width: 500px){
+    .onePinTitle {
+        font-size: 1em;
+    }
+    .followButton, .saveButton {
+        font-size: 1rem;
     }
 }

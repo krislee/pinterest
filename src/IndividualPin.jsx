@@ -63,7 +63,9 @@ export default function IndividualPin ({ apiURL, grabStartSliceNumber, grabNoMor
             <div className="onePin">
                 <img src={onePin[0].images["orig"].url}></img>
                 <div className="onePinDetails">
-                    <button className="saveButton" disabled>Save</button>
+                    <div className="saveButtonContainer">
+                        <button className="saveButton" disabled>Save</button>
+                    </div>
                     <div className="onePinTitle"><h1>{onePin[0].title}</h1></div>
                     <div className="onePinDescription">
                         {onePin[0].description.length > 100 ? <p>{onePin[0].description.slice(0, 100)}...</p> : <p>{onePin[0].description}</p>}
