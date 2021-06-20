@@ -20,7 +20,9 @@ export default function UseIntersect(loading, noMorePins, resultsPerPage, loader
             observer.observe(loader.current)
         }
 
-        return () => observer.unobserve(loader.current)
+        return () => {
+            if(loader.current) observer.unobserve(loader.current)
+        }
     }, [loading, noMorePins]) // We want loading and noMore in the dependency array because we want to know 
     // if we should still be observing or not if we are loading pins or there is no more pins
 

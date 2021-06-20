@@ -1,8 +1,9 @@
 import './App.css';
-import React, { useRef } from 'react' 
-import UseGetPins from './useGetPins'
-import UseIntersect from './useIntersect'
-import Pins from './pins'
+import React, { useState } from 'react' 
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
+import Pins from './Pins'
+import IndividualPin from './IndividualPin';
 
 // CONSTANTS
 const apiURL = 'nyc_ttp_pins.json'
@@ -15,15 +16,25 @@ const options = {
 
 
 export default function App() {
-    const loader = useRef(null) 
+    const [startSliceNumber, setStartSliceNumber] = useState(0)
+    const [noMorePins, setNoMorePins] = useState(false)
 
-    // Get all or query pins from UseGetPins hook
-    const { loading, noMorePins, grabStartSliceNumber, query, handleQuery, pins, error } = UseGetPins(apiURL, resultsPerPage, loader, options)
-    // UseIntersect hook for infinity scroll 
-    UseIntersect(loading, noMorePins, resultsPerPage, loader, options, grabStartSliceNumber)
-
+    const grabStartSliceNumber = (startSliceNumber) => setStartSliceNumber(startSliceNumber)
+    const grabNoMorePins = (noMorePins) => setNoMorePins(noMorePins)
 
     return (
-        <Pins query={query} handleQuery={handleQuery} pins={pins} loader={loader} loading={loading} error={error}/>
+        <BrowserRouter>
+            
+            <Switch>
+              
+                <Route exact path="/pin/:pinId">
+                    <IndividualPin apiURL={apiURL} grabStartSliceNumber={grabStartSliceNumber} grabNoMorePins={grabNoMorePins} />
+                </Route>
+                <Route exact path="/">
+                <Pins apiURL={apiURL} resultsPerPage={resultsPerPage} options={options} startSliceNumber={startSliceNumber} grabStartSliceNumber={grabStartSliceNumber} noMorePins={noMorePins} grabNoMorePins={grabNoMorePins} />
+                </Route>
+            </Switch>
+        </BrowserRouter>
+       
     )
 }

@@ -3,25 +3,21 @@ import { useEffect, useState } from 'react'
 /*
  * When your scrolling hits the bottom, fetch the next "page" of pins
  */
-export default function UseGetPins(apiURL, resultsPerPage) { 
+export default function UseGetPins(apiURL, resultsPerPage, startSliceNumber, grabStartSliceNumber, grabNoMorePins) { 
     // States
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
 
     const [query, setQuery] = useState('')
     const [pins, setPins] = useState([])
-    const [startSliceNumber, setStartSliceNumber] = useState(0)
-    const [noMorePins, setNoMorePins] = useState(false)
-
-    const grabStartSliceNumber = (startSliceNumber) => setStartSliceNumber(startSliceNumber)
 
     const handleQuery = (event) => {
         setQuery(event.target.value)
     
         // Reset the page back to the beginning
-        setStartSliceNumber(0) 
+        grabStartSliceNumber(0) 
         // Reset noMore state so infinity scroll can be triggered
-        setNoMorePins(false)
+        grabNoMorePins(false)
     }
 
     useEffect(() => {
@@ -41,7 +37,7 @@ export default function UseGetPins(apiURL, resultsPerPage) {
 
         const getPins = async () => {
             try {
-                const pinsResponse = await fetch(`${apiURL}`, {signal: signal})
+                const pinsResponse = await fetch(`../${apiURL}`, {signal: signal})
 
                 const pinsJSON = await pinsResponse.json()
         
@@ -59,7 +55,7 @@ export default function UseGetPins(apiURL, resultsPerPage) {
                     })
 
                     setLoading(false)
-                    if(startSliceNumber >= getQueryResults.length) setNoMorePins(true)
+                    if(startSliceNumber >= getQueryResults.length) grabNoMorePins(true)
         
                 } else {
                     const nextPins = pinsJSON.slice(startSliceNumber, startSliceNumber+resultsPerPage)
@@ -69,7 +65,7 @@ export default function UseGetPins(apiURL, resultsPerPage) {
                     })
 
                     setLoading(false)
-                    if(startSliceNumber >= pinsJSON.length) setNoMorePins(true)
+                    if(startSliceNumber >= pinsJSON.length) grabNoMorePins(true)
                     
                 }
         
@@ -88,6 +84,6 @@ export default function UseGetPins(apiURL, resultsPerPage) {
 
     }, [startSliceNumber, query])
 
-    return { loading, noMorePins, grabStartSliceNumber, query, handleQuery, pins, error }
+    return { loading, query, handleQuery, pins, error }
 
 }
